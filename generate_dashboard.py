@@ -11,14 +11,14 @@ conn.close()
 kpi = [("전체 매물", f"{len(df):,}건"), ("평균 보증금", f"{int(df['deposit'].mean()):,}만"), ("평균 월세", f"{int(df['monthlyRent'].mean()):,}만"), ("평균 면적", f"{round(df['size'].mean(), 1)}㎡"), ("최다 업종", df['businessLargeCodeName'].mode()[0])]
 keywords = sorted(TfidfVectorizer(max_features=10).fit(df['title'].fillna('')).get_feature_names_out())
 
-# 세로 배치 섹션 구성
+# 섹션 구성
 sections = [
     {"icon": "briefcase", "title": "업종 분석", "items": [{"img": "images/top_business_large.png", "title": "업종 분포", "text": "검증된 모델을 파악해 틈새 전략을 세우세요."}, {"img": "images/dist_1.png", "title": "지역별 분포", "text": "역세권 우위 기반의 전략적 포지셔닝이 필수입니다."}]},
     {"icon": "map", "title": "상권 밀집도", "items": [{"img": "images/hist_0.png", "title": "보증금 분포", "text": "중앙값 2,000만원이 핵심 진입 장벽입니다."}, {"img": "images/hist_1.png", "title": "월세 분포", "text": "100~150만원 구간의 공실 방어 전략을 적용하세요."}]},
     {"icon": "map-pin", "title": "입지/트렌드", "items": [{"img": "images/corr.png", "title": "가격 상관관계", "text": "보증금-월세 상관관계를 이용해 협상력을 확보하세요."}, {"img": "images/floor_premium_trend.png", "title": "층별 트렌드", "text": "고층부 가성비 입지가 생존율을 높입니다."}]}
 ]
 
-# HTML 생성 (KPI 복구 + 세로 정렬)
+# HTML 생성
 items_html = "".join([f'''
 <div class='glass p-6 mb-8'>
     <h2 class='text-2xl font-bold mb-6 flex items-center gap-3'><i data-lucide='{g['icon']}'></i>{g['title']}</h2>
@@ -29,8 +29,14 @@ items_html = "".join([f'''
 
 html = f"""
 <!DOCTYPE html><html lang='ko'><head><script src='https://cdn.tailwindcss.com'></script><script src='https://unpkg.com/lucide@latest'></script>
-<style>body{{background:#0f172a;color:#f1f5f9;}} .glass{{background:rgba(30,41,59,0.7);backdrop-filter:blur(12px);border-radius:1rem;}}</style>
-</head><body class='p-8'><div class='max-w-7xl mx-auto'>
+<style>
+    body {{ background: #0f172a; color: #f1f5f9; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }}
+    .glass {{ background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; position: relative; }}
+    #stars {{ position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }}
+    .star {{ position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--duration) infinite; }}
+    @keyframes twinkle {{ 0%, 100% {{ opacity: 0.2; }} 50% {{ opacity: 1; }} }}
+</style></head>
+<body class='p-8'><div id='stars'></div><div class='max-w-7xl mx-auto'>
     <header class='mb-10'>
         <h1 class='text-4xl font-bold text-sky-400 mb-6'>종합 상가 데이터 대시보드</h1>
         <div class='grid grid-cols-2 md:grid-cols-5 gap-4'>
@@ -41,7 +47,19 @@ html = f"""
     <div class='glass p-8'><h2 class='text-2xl font-bold mb-6'>핵심 키워드 TOP 10</h2>
         <div class='flex flex-wrap gap-3'>{"".join([f"<span class='bg-sky-900 text-sky-200 px-4 py-2 rounded-full text-sm font-bold border border-sky-700'>{k}</span>" for k in keywords])}</div>
     </div>
-    <script>lucide.createIcons();</script>
+    <script>
+        const stars = document.getElementById('stars');
+        for(let i=0; i<100; i++) {{
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.width = s.style.height = Math.random()*3 + 'px';
+            s.style.left = Math.random()*100 + '%';
+            s.style.top = Math.random()*100 + '%';
+            s.style.setProperty('--duration', Math.random()*3 + 1 + 's');
+            stars.appendChild(s);
+        }}
+        lucide.createIcons();
+    </script>
 </div></body></html>
 """
 with open('index.html', 'w', encoding='utf-8') as f: f.write(html)

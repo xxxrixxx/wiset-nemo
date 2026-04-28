@@ -1,49 +1,36 @@
 
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-    <meta charset='UTF-8'>
-    <title>심층 상권 분석 대시보드</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
-    <style>
-        body { background: #f4f7f6; }
-        .card { margin-bottom: 20px; border-radius: 12px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .insight-box { background: #eef3f7; padding: 15px; border-radius: 8px; font-size: 0.9rem; }
-    </style>
-</head>
-<body>
-<div class='container py-5'>
-    <h2 class='mb-4'>상가 매물 전략적 EDA 분석 리포트</h2>
+<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+<style>
+    body { background: #f8f9fa; }
+    .card { border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin-bottom: 30px; }
+    .insight { background: #f8f9fa; border-left: 4px solid #0d6efd; padding: 15px; }
+</style>
+</head><body><div class='container py-5'>
+    <h1 class='mb-5'>상가 매물 전략적 EDA 분석 리포트</h1>
+    
     <div class='card p-4'>
-        <h5>1. 보증금 분석</h5>
-        <div class='row'>
-            <div class='col-md-6'><img src='images/hist_0.png' class='img-fluid'></div>
-            <div class='col-md-6 insight-box'>
-                <p><strong>비즈니스 인사이트:</strong> 2,000만원 내외가 핵심 진입 장벽이며, 창업자 70%가 이 구간에 집중되어 있어 해당 매물 확보가 공실 방어의 핵심입니다.</p>
-                <p><strong>분석 및 해석:</strong> 보증금 데이터는 전형적인 롱테일 분포를 보입니다. 평균값(약 2,800만원)은 고가 매물에 의해 왜곡되므로, 중앙값(2,000만원)을 기준으로 시장 전략을 수립해야 합니다.</p>
-            </div>
-        </div>
+        <h3>업종별 권리금 분포</h3>
+        <div class='row'><div class='col-lg-6'><img src='images/premium_by_industry.png' class='img-fluid rounded'></div>
+        <div class='col-lg-6'><div class='insight'>
+            <p><strong>💡 Biz Insight:</strong> 일반음식점과 주류점의 이상치(Outlier)는 시설/바닥 권리금이 복합적으로 작용함을 보여줍니다. 창업자에게는 초기 투자비 회수 가능성을 판단하는 핵심 지표입니다.</p>
+            <p class='text-primary'><strong>🔍 해석 방법:</strong> 박스플롯을 통해 각 업종의 중앙값과 이상치를 확인하십시오. 중앙값이 낮고 이상치가 많은 업종은 진입 장벽이 낮으나 성공 시 수익성이 높은 '고위험-고수익' 구조를 띠고 있습니다.</p>
+        </div></div></div>
     </div>
     <div class='card p-4'>
-        <h5>2. 월세 분석</h5>
-        <div class='row'>
-            <div class='col-md-6'><img src='images/hist_1.png' class='img-fluid'></div>
-            <div class='col-md-6 insight-box'>
-                <p><strong>비즈니스 인사이트:</strong> 100~150만원 구간이 가장 빈번하며, 222만원 이하가 전체의 75%를 차지하여 소규모 자영업자 타겟팅이 주류입니다.</p>
-                <p><strong>분석 및 해석:</strong> 월세의 표준편차가 매우 커 입지/규모에 따른 비용 격차가 극심합니다. 단순히 평균 월세를 기준으로 삼지 말고, 업종별/층별로 세분화된 임대료 기준을 적용해야 합니다.</p>
-            </div>
-        </div>
+        <h3>면적-임대료 효율</h3>
+        <div class='row'><div class='col-lg-6'><img src='images/size_rent_efficiency.png' class='img-fluid rounded'></div>
+        <div class='col-lg-6'><div class='insight'>
+            <p><strong>💡 Biz Insight:</strong> 소형 평수(50㎡ 미만) 매물에서 가격 편차가 심합니다. 이는 면적보다 초역세권 등 입지 조건이 가격 결정력을 압도함을 의미합니다.</p>
+            <p class='text-primary'><strong>🔍 해석 방법:</strong> 산점도 회귀선에서 크게 벗어난 매물들은 면적 효율이 떨어지거나 입지 가치가 과대평가된 매물이므로 꼼꼼한 비교 분석이 필요합니다.</p>
+        </div></div></div>
     </div>
     <div class='card p-4'>
-        <h5>3. 가격 요인 상관관계</h5>
-        <div class='row'>
-            <div class='col-md-6'><img src='images/corr.png' class='img-fluid'></div>
-            <div class='col-md-6 insight-box'>
-                <p><strong>비즈니스 인사이트:</strong> 보증금과 월세는 0.89의 강력한 양의 상관관계를 가지며, 합리적이고 안정적인 시장 가격 메커니즘을 형성하고 있습니다.</p>
-                <p><strong>분석 및 해석:</strong> 회귀선에서 크게 벗어난 매물들은 보증금 조절형 매물로서, 소유주의 수익 전략이나 임차인의 고정비 절감 요구가 반영된 특수 사례로 해석해야 합니다.</p>
-            </div>
-        </div>
+        <h3>층별 임대료 및 권리금 추이</h3>
+        <div class='row'><div class='col-lg-6'><img src='images/floor_premium_trend.png' class='img-fluid rounded'></div>
+        <div class='col-lg-6'><div class='insight'>
+            <p><strong>💡 Biz Insight:</strong> 1층이 시장을 주도하나, 고층부로 갈수록 권리금이 급격히 하락합니다. 마케팅 의존도가 높은 사업은 고층부 가성비 입지가 생존율을 높입니다.</p>
+            <p class='text-primary'><strong>🔍 해석 방법:</strong> 단위 면적당 임대료를 비교하십시오. 1층의 광고 효과와 고층부의 비용 절감 효과를 사업 모델의 성격(로드샵 vs 목적형)에 맞춰 대조해 보는 것이 핵심입니다.</p>
+        </div></div></div>
     </div>
-</div>
-</body>
-</html>
+</div></body></html>

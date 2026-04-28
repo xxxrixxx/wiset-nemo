@@ -1,46 +1,43 @@
 import sqlite3
 import pandas as pd
-import json
 
-# 1. 데이터 로드 및 통계 요약
+# 데이터 로드
 conn = sqlite3.connect('data/nemo_stores.db')
 df = pd.read_sql('SELECT * FROM stores', conn)
 conn.close()
 
-total_count = len(df)
-# 2. 섹션별 상세 분석 데이터 및 인사이트 (리포트 전체 반영)
-sections = [
-    {"id": "deposit", "title": "보증금 분석", "img": "images/hist_0.png", "insight": "중앙값 2,000만원이 핵심 진입 장벽입니다. 예비 창업자의 70%가 이 구간에 집중되어 있어 해당 매물 확보가 공실 방어의 핵심입니다.", "interp": "평균값은 고액 매물에 의해 왜곡되므로 25~75% 분위수(1,000~3,000만원)를 중심으로 시장 전략을 수립하십시오."},
-    {"id": "rent", "title": "월세 분석", "img": "images/hist_1.png", "insight": "100~150만원 구간이 가장 빈번하며, 전체의 75%가 222만원 이하로 소규모 자영업자 타겟팅이 주류를 이룹니다.", "interp": "표준편차가 매우 커 입지/규모에 따른 비용 격차가 큽니다. 단순히 평균 월세를 기준으로 삼지 말고 업종별/층별 세분화된 기준을 적용하세요."},
-    {"id": "corr", "title": "가격 상관관계", "img": "images/corr.png", "insight": "보증금과 월세는 0.89의 강력한 상관관계를 가지며 안정적인 시장 가격 메커니즘을 형성합니다.", "interp": "회귀선에서 벗어난 매물은 보증금 조절형 매물로서 소유주와 임차인 간 협상 영역으로 해석됩니다."},
-    {"id": "premium", "title": "업종별 권리금", "img": "images/premium_by_industry.png", "insight": "일반음식점/주류점의 이상치는 시설/바닥 권리금이 복합적으로 작용함을 보여줍니다. 초기 투자비 회수 가능성을 판단하는 핵심 지표입니다.", "interp": "중앙값이 낮고 이상치가 많은 업종은 진입 장벽이 낮으나 성공 시 수익성이 높은 '고위험-고수익' 구조입니다."},
-    {"id": "size", "title": "면적-임대료 효율", "img": "images/size_rent_efficiency.png", "insight": "소형 평수에서 가격 편차가 심합니다. 면적보다 초역세권 등 입지 조건이 가격 결정력을 압도합니다.", "interp": "산점도 회귀선에서 크게 벗어난 매물은 면적 효율이 떨어지거나 입지 가치가 과대평가된 매물입니다."},
-    {"id": "floor", "title": "층별 트렌드", "img": "images/floor_premium_trend.png", "insight": "1층이 시장을 주도하나 고층부로 갈수록 권리금이 급격히 하락합니다. 마케팅 의존형 사업은 고층부 가성비 입지가 생존율을 높입니다.", "interp": "1층의 광고 효과와 고층부의 비용 절감 효과를 사업 모델의 성격(로드샵 vs 목적형)에 맞춰 대조하십시오."}
-]
-
-# 3. HTML 생성 (Glassmorphism 디자인 적용)
+# HTML 생성 (Tailwind 기반 다크 테마 및 Glassmorphism)
 html = f"""
 <!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'>
-<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+<script src='https://cdn.tailwindcss.com'></script>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap' rel='stylesheet'>
 <style>
-    body {{ background: #e0e5ec; font-family: 'Pretendard', sans-serif; }}
-    .glass {{ background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; margin-bottom: 30px; padding: 25px; }}
-    .insight {{ background: rgba(240, 240, 240, 0.6); border-radius: 12px; padding: 15px; margin-top: 10px; }}
+    body {{ font-family: 'Inter', 'Noto Sans KR', sans-serif; background-color: #0f172a; color: #f1f5f9; }}
+    .glass-card {{ background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; }}
+    .chart-container:hover {{ transform: translateY(-5px); transition: 0.3s; }}
 </style>
-</head><body><div class='container py-5'>
-    <div class='glass mb-5'>
-        <h1 class='text-secondary'>상가 매물 전략 EDA 리포트</h1>
-        <p><strong>데이터 규모:</strong> 총 {total_count}개 매물 분석 | <strong>변수 구성:</strong> 가격, 위치, 업종 등 40개 항목 | <strong>분석 방식:</strong> 통계 및 텍스트 마이닝</p>
+</head><body class='p-8'><div class='max-w-7xl mx-auto'>
+    <header class='mb-10'><h1 class='text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-500'>상가 매물 분석 대시보드</h1></header>
+    
+    <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+        {"".join([f'''
+        <div class='glass-card p-6 chart-container'>
+            <h3 class='text-xl font-semibold mb-4 text-sky-400'>{s['title']}</h3>
+            <img src='{s['img']}' class='w-full rounded-lg'>
+            <div class='mt-4 p-4 bg-slate-900/50 rounded-lg'>
+                <p class='text-sm text-slate-300'><strong>Insight:</strong> {s['insight']}</p>
+                <p class='text-xs text-indigo-400 mt-2'><strong>해석법:</strong> {s['interp']}</p>
+            </div>
+        </div>''' for s in [
+            {"title": "보증금 분석", "img": "images/hist_0.png", "insight": "중앙값 2,000만원이 핵심 진입 장벽입니다.", "interp": "평균값은 고가 매물에 의해 왜곡되므로 25~75% 분위수 중심으로 보십시오."},
+            {"title": "월세 분석", "img": "images/hist_1.png", "insight": "100~150만원이 가장 빈번하며, 222만원 이하가 75%를 차지합니다.", "interp": "표준편차가 크므로 단순히 평균을 보지 말고 업종별로 세분화하여 분석하세요."},
+            {"title": "가격 상관관계", "img": "images/corr.png", "insight": "보증금과 월세는 0.89의 강력한 양의 상관관계를 가집니다.", "interp": "회귀선에서 벗어난 매물은 협상의 대상이 되는 특수 사례입니다."},
+            {"title": "업종별 권리금", "img": "images/premium_by_industry.png", "insight": "음식점/주류점은 초기 투자비 회수 지표로 권리금을 확인해야 합니다.", "interp": "중앙값이 낮고 이상치가 많은 업종은 '고위험-고수익' 구조를 띱니다."},
+            {"title": "면적-임대료 효율", "img": "images/size_rent_efficiency.png", "insight": "소형 평수는 입지 조건에 따른 가격 편차가 극심합니다.", "interp": "회귀선에서 벗어난 매물은 입지가 과대평가되었을 가능성이 큽니다."},
+            {"title": "층별 트렌드", "img": "images/floor_premium_trend.png", "insight": "1층이 시장 주도하나, 고층부 가성비 입지가 생존율을 높입니다.", "interp": "1층의 광고 효과 vs 고층부의 비용 절감을 비교하십시오."}
+        ]]
+        )}
     </div>
-    {"".join([f'''
-    <div class='glass'>
-        <h3>{s['title']}</h3>
-        <div class='row'><div class='col-lg-6'><img src='{s['img']}' class='img-fluid rounded'></div>
-        <div class='col-lg-6'><div class='insight'>
-            <p><strong>💡 Biz Insight:</strong> {s['insight']}</p>
-            <p class='text-primary'><strong>🔍 해석 방법:</strong> {s['interp']}</p>
-        </div></div></div>
-    </div>''' for s in sections])}
 </div></body></html>
 """
 with open('index.html', 'w', encoding='utf-8') as f: f.write(html)

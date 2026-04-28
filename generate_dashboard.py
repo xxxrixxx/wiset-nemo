@@ -201,7 +201,6 @@ final_html = html_template.replace("{{total_count}}", f"{total_count:,}")\
                           .replace("{{floor_labels}}", floor_labels_json)\
                           .replace("{{floor_values}}", floor_values_json)
 
-with open('dashboard.html', 'w', encoding='utf-8') as f:
-    f.write(final_html)
+with open('index.html', 'w', encoding='utf-8') as f:    f.write(final_html)
 
 print("키워드 분석이 포함된 대시보드 생성 완료")

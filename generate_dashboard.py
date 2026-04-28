@@ -2,31 +2,38 @@ import sqlite3
 import pandas as pd
 import json
 
-# 데이터 로드
+# 1. 데이터 로드 및 통계 요약
 conn = sqlite3.connect('data/nemo_stores.db')
 df = pd.read_sql('SELECT * FROM stores', conn)
 conn.close()
 
-# 섹션별 분석 데이터 및 인사이트
+total_count = len(df)
+# 2. 섹션별 상세 분석 데이터 및 인사이트 (리포트 전체 반영)
 sections = [
-    {"id": "premium", "title": "업종별 권리금 분포", "img": "images/premium_by_industry.png", "insight": "일반음식점과 주류점의 이상치(Outlier)는 시설/바닥 권리금이 복합적으로 작용함을 보여줍니다. 창업자에게는 초기 투자비 회수 가능성을 판단하는 핵심 지표입니다.", "interp": "박스플롯을 통해 각 업종의 중앙값과 이상치를 확인하십시오. 중앙값이 낮고 이상치가 많은 업종은 진입 장벽이 낮으나 성공 시 수익성이 높은 '고위험-고수익' 구조를 띠고 있습니다."},
-    {"id": "size", "title": "면적-임대료 효율", "img": "images/size_rent_efficiency.png", "insight": "소형 평수(50㎡ 미만) 매물에서 가격 편차가 심합니다. 이는 면적보다 초역세권 등 입지 조건이 가격 결정력을 압도함을 의미합니다.", "interp": "산점도 회귀선에서 크게 벗어난 매물들은 면적 효율이 떨어지거나 입지 가치가 과대평가된 매물이므로 꼼꼼한 비교 분석이 필요합니다."},
-    {"id": "floor", "title": "층별 임대료 및 권리금 추이", "img": "images/floor_premium_trend.png", "insight": "1층이 시장을 주도하나, 고층부로 갈수록 권리금이 급격히 하락합니다. 마케팅 의존도가 높은 사업은 고층부 가성비 입지가 생존율을 높입니다.", "interp": "단위 면적당 임대료를 비교하십시오. 1층의 광고 효과와 고층부의 비용 절감 효과를 사업 모델의 성격(로드샵 vs 목적형)에 맞춰 대조해 보는 것이 핵심입니다."}
+    {"id": "deposit", "title": "보증금 분석", "img": "images/hist_0.png", "insight": "중앙값 2,000만원이 핵심 진입 장벽입니다. 예비 창업자의 70%가 이 구간에 집중되어 있어 해당 매물 확보가 공실 방어의 핵심입니다.", "interp": "평균값은 고액 매물에 의해 왜곡되므로 25~75% 분위수(1,000~3,000만원)를 중심으로 시장 전략을 수립하십시오."},
+    {"id": "rent", "title": "월세 분석", "img": "images/hist_1.png", "insight": "100~150만원 구간이 가장 빈번하며, 전체의 75%가 222만원 이하로 소규모 자영업자 타겟팅이 주류를 이룹니다.", "interp": "표준편차가 매우 커 입지/규모에 따른 비용 격차가 큽니다. 단순히 평균 월세를 기준으로 삼지 말고 업종별/층별 세분화된 기준을 적용하세요."},
+    {"id": "corr", "title": "가격 상관관계", "img": "images/corr.png", "insight": "보증금과 월세는 0.89의 강력한 상관관계를 가지며 안정적인 시장 가격 메커니즘을 형성합니다.", "interp": "회귀선에서 벗어난 매물은 보증금 조절형 매물로서 소유주와 임차인 간 협상 영역으로 해석됩니다."},
+    {"id": "premium", "title": "업종별 권리금", "img": "images/premium_by_industry.png", "insight": "일반음식점/주류점의 이상치는 시설/바닥 권리금이 복합적으로 작용함을 보여줍니다. 초기 투자비 회수 가능성을 판단하는 핵심 지표입니다.", "interp": "중앙값이 낮고 이상치가 많은 업종은 진입 장벽이 낮으나 성공 시 수익성이 높은 '고위험-고수익' 구조입니다."},
+    {"id": "size", "title": "면적-임대료 효율", "img": "images/size_rent_efficiency.png", "insight": "소형 평수에서 가격 편차가 심합니다. 면적보다 초역세권 등 입지 조건이 가격 결정력을 압도합니다.", "interp": "산점도 회귀선에서 크게 벗어난 매물은 면적 효율이 떨어지거나 입지 가치가 과대평가된 매물입니다."},
+    {"id": "floor", "title": "층별 트렌드", "img": "images/floor_premium_trend.png", "insight": "1층이 시장을 주도하나 고층부로 갈수록 권리금이 급격히 하락합니다. 마케팅 의존형 사업은 고층부 가성비 입지가 생존율을 높입니다.", "interp": "1층의 광고 효과와 고층부의 비용 절감 효과를 사업 모델의 성격(로드샵 vs 목적형)에 맞춰 대조하십시오."}
 ]
 
-# HTML 생성
+# 3. HTML 생성 (Glassmorphism 디자인 적용)
 html = f"""
 <!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'>
 <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
 <style>
-    body {{ background: #f8f9fa; }}
-    .card {{ border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin-bottom: 30px; }}
-    .insight {{ background: #f8f9fa; border-left: 4px solid #0d6efd; padding: 15px; }}
+    body {{ background: #e0e5ec; font-family: 'Pretendard', sans-serif; }}
+    .glass {{ background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; margin-bottom: 30px; padding: 25px; }}
+    .insight {{ background: rgba(240, 240, 240, 0.6); border-radius: 12px; padding: 15px; margin-top: 10px; }}
 </style>
 </head><body><div class='container py-5'>
-    <h1 class='mb-5'>상가 매물 전략적 EDA 분석 리포트</h1>
+    <div class='glass mb-5'>
+        <h1 class='text-secondary'>상가 매물 전략 EDA 리포트</h1>
+        <p><strong>데이터 규모:</strong> 총 {total_count}개 매물 분석 | <strong>변수 구성:</strong> 가격, 위치, 업종 등 40개 항목 | <strong>분석 방식:</strong> 통계 및 텍스트 마이닝</p>
+    </div>
     {"".join([f'''
-    <div class='card p-4'>
+    <div class='glass'>
         <h3>{s['title']}</h3>
         <div class='row'><div class='col-lg-6'><img src='{s['img']}' class='img-fluid rounded'></div>
         <div class='col-lg-6'><div class='insight'>

@@ -1,6 +1,5 @@
 import sqlite3
 import pandas as pd
-import json
 
 conn = sqlite3.connect('data/nemo_stores.db')
 df = pd.read_sql('SELECT * FROM stores', conn)
@@ -9,27 +8,27 @@ conn.close()
 # KPI 데이터
 kpi = [("전체 매물", f"{len(df):,}건"), ("평균 보증금", f"{int(df['deposit'].mean()):,}만"), ("평균 월세", f"{int(df['monthlyRent'].mean()):,}만"), ("평균 면적", f"{round(df['size'].mean(), 1)}㎡"), ("최다 업종", df['businessLargeCodeName'].mode()[0])]
 
-# 전체 분석 섹션 (누락된 섹션 복구)
+# 상세 분석 섹션
 sections = [
     {"icon": "briefcase", "title": "업종 분석", "items": [
-        {"img": "images/top_business_large.png", "title": "업종별 분포", "text": "검증된 비즈니스 모델을 파악하여 틈새 전략을 세우세요."},
-        {"img": "images/region_industry_stacked.png", "title": "지역별 업종 분포", "text": "역세권의 F&B 우위를 기반으로 한 입지 포지셔닝이 필수입니다."}
+        {"img": "images/top_business_large.png", "title": "업종별 분포", "text": "상위 업종의 높은 분포는 검증된 모델을 의미합니다. 틈새 시장 노리는 경우 역발상적 접근이 가능합니다."},
+        {"img": "images/region_industry_stacked.png", "title": "지역별 업종 분포", "text": "주요 역세권 상권은 F&B 및 서비스 업종이 독점적 우위를 점합니다. 지역별 특성에 맞는 전략적 포지셔닝이 필수입니다."}
     ]},
     {"icon": "dollar-sign", "title": "비용 및 효율성", "items": [
-        {"img": "images/premium_by_industry.png", "title": "업종별 권리금", "text": "시설/영업가치가 반영된 권리금을 통해 투자 회수 전략을 수립하세요."},
-        {"img": "images/size_rent_efficiency.png", "title": "면적 대비 임대료", "text": "소형 평수는 입지 가치가 가격을 결정하므로 효율적인 선택이 필요합니다."}
-    ]},
-    {"icon": "map", "title": "상권 밀집도", "items": [
-        {"img": "images/hist_0.png", "title": "보증금 분포", "text": "중앙값 2,000만원 중심의 시장 진입 전략이 필요합니다."},
-        {"img": "images/hist_1.png", "title": "월세 분포", "text": "100~150만원 구간의 공실 방어 전략을 적용하세요."}
-    ]},
-    {"icon": "map-pin", "title": "입지 및 트렌드", "items": [
-        {"img": "images/corr.png", "title": "가격 상관관계", "text": "보증금과 월세의 상관관계를 이용해 협상력을 확보하십시오."},
-        {"img": "images/floor_premium_trend.png", "title": "층별 트렌드", "text": "로드샵 vs 목적형 사업 성격에 따른 층별 전략을 대조하십시오."}
+        {"img": "images/premium_by_industry.png", "title": "업종별 권리금", "text": "일반음식점 등은 시설/영업가치가 반영된 권리금으로 투자 회수 전략을 수립하세요."},
+        {"img": "images/size_rent_efficiency.png", "title": "면적 대비 임대료", "text": "소형 평수는 입지 조건이 가격을 결정하므로 효율적인 선택이 필요합니다."}
     ]}
 ]
 
-# HTML 생성
+# 종합 분석 인사이트 (2,000자 이내)
+full_insight = """
+본 데이터 분석은 총 387건의 매물을 대상으로 상권의 자본 투입과 입지 효율성을 진단하였습니다. 
+첫째, 시장 가격 메커니즘의 안정성입니다. 보증금-월세 간 0.89의 강한 상관관계는 시장 가격이 물리적 가치에 수렴함을 보여줍니다. 
+둘째, 입지 전략의 변화입니다. 1층 중심의 고비용 구조를 탈피하여, 2층 이상의 가성비 전략과 마케팅 기반의 입지 선택이 생존율을 높이는 핵심 동력이 될 수 있습니다. 
+셋째, 업종별 권리금의 투명한 분석을 통해 예비 창업자들은 '고위험-고수익' 업종과 '저비용-안정형' 입지를 구분하여 최적의 모델을 선택해야 합니다. 
+결론적으로, 본 데이터는 단순 매물 리스트를 넘어 대한민국의 실물 경제 생존 지도가 담겨 있습니다. 창업자는 단순히 1층을 고집하기보다 데이터에 기반하여 고정비(임대료)와 초기 투자비(권리금)를 절감하는 역발상적 전략을 취해야 하며, 플랫폼은 이를 가이드하는 데이터 컨설팅 기능을 강화하여 사용자 락인을 극대화해야 합니다. 상권 내에서 검증된 비즈니스 모델을 파악하고, 지역별 업종 분포를 고려하여 경쟁 우위를 점할 수 있는 전략적 포지셔닝을 실천하는 것이 장기적 생존의 핵심입니다.
+"""
+
 html = f"""
 <!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'>
 <script src='https://cdn.tailwindcss.com'></script>
@@ -51,8 +50,8 @@ html = f"""
             {"".join([f"<div class='bg-slate-900/50 p-4 rounded-lg'><img src='{i['img']}' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>{i['title']}</h4><p class='text-sm text-slate-300'>{i['text']}</p></div>" for i in g['items']])}
         </div>
     </div>''' for g in sections])}
-    <div class='glass p-8'><h2 class='text-2xl font-bold text-white mb-4'>핵심 키워드 전략 분석</h2>
-        <img src='images/keyword_strategy_tfidf.png' class='w-full rounded-lg'>
+    <div class='glass p-8'><h2 class='text-2xl font-bold text-white mb-4'>종합 분석 인사이트</h2>
+        <p class='text-slate-300 leading-relaxed'>{full_insight}</p>
     </div>
     <script>lucide.createIcons();</script>
 </div></body></html>

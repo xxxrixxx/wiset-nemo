@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-import json
 
 conn = sqlite3.connect('data/nemo_stores.db')
 df = pd.read_sql('SELECT * FROM stores', conn)
@@ -12,13 +11,23 @@ texts = df['title'].fillna('').tolist()
 tfidf = TfidfVectorizer(max_features=10).fit(texts)
 keywords = sorted(tfidf.get_feature_names_out())
 
-# 섹션 및 HTML 생성
+# 섹션 구성 (실제 존재하는 파일명 사용: dist_1.png가 지역 분포, top_business_large.png가 업종)
 sections = [
-    {"icon": "briefcase", "title": "업종 분석", "items": [{"img": "images/top_business_large.png", "title": "업종 분포", "text": "검증된 모델을 파악해 틈새 전략을 세우세요."}, {"img": "images/region_industry_stacked.png", "title": "지역별 분포", "text": "역세권 우위 기반의 전략적 포지셔닝이 필수입니다."}]},
-    {"icon": "map", "title": "상권 밀집도", "items": [{"img": "images/hist_0.png", "title": "보증금", "text": "중앙값 2,000만원이 핵심 진입 장벽입니다."}, {"img": "images/hist_1.png", "title": "월세", "text": "100~150만원 구간의 공실 방어 전략을 적용하세요."}]},
-    {"icon": "map-pin", "title": "입지/트렌드", "items": [{"img": "images/corr.png", "title": "가격 상관관계", "text": "보증금-월세 상관관계를 이용해 협상력을 확보하세요."}, {"img": "images/floor_premium_trend.png", "title": "층별 트렌드", "text": "고층부 가성비 입지가 생존율을 높입니다."}]}
+    {"icon": "briefcase", "title": "업종 분석", "items": [
+        {"img": "images/top_business_large.png", "title": "전체 업종 분포", "text": "검증된 모델을 파악해 틈새 전략을 세우세요."},
+        {"img": "images/dist_1.png", "title": "지역별 업종 분포", "text": "역세권 우위 기반의 전략적 포지셔닝이 필수입니다."}
+    ]},
+    {"icon": "map", "title": "상권 밀집도", "items": [
+        {"img": "images/hist_0.png", "title": "보증금 분포", "text": "중앙값 2,000만원이 핵심 진입 장벽입니다."},
+        {"img": "images/hist_1.png", "title": "월세 분포", "text": "100~150만원 구간의 공실 방어 전략을 적용하세요."}
+    ]},
+    {"icon": "map-pin", "title": "입지/트렌드", "items": [
+        {"img": "images/corr.png", "title": "가격 상관관계", "text": "보증금-월세 상관관계를 이용해 협상력을 확보하세요."},
+        {"img": "images/floor_premium_trend.png", "title": "층별 트렌드", "text": "고층부 가성비 입지가 생존율을 높입니다."}
+    ]}
 ]
 
+# HTML 생성
 items_html = ""
 for g in sections:
     items_html += f"<div class='glass p-6 mb-8'><h2 class='text-2xl font-bold mb-6 flex items-center gap-3'><i data-lucide='{g['icon']}'></i>{g['title']}</h2><div class='grid grid-cols-1 md:grid-cols-2 gap-6'>"

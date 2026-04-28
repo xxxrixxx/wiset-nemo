@@ -7,27 +7,38 @@
     .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; }
 </style></head><body class='p-8'><div class='max-w-7xl mx-auto'>
     <header class='mb-10'>
-        <h1 class='text-4xl font-bold text-sky-400 mb-6'>상가 매물 종합 분석</h1>
+        <h1 class='text-4xl font-bold text-sky-400 mb-6'>상가 매물 종합 분석 대시보드</h1>
         <div class='grid grid-cols-2 md:grid-cols-5 gap-4'>
             <div class='glass p-4 text-center'><div class='text-slate-400 text-xs'>전체 매물</div><div class='text-lg font-bold text-sky-300'>387건</div></div><div class='glass p-4 text-center'><div class='text-slate-400 text-xs'>평균 보증금</div><div class='text-lg font-bold text-sky-300'>28,898만</div></div><div class='glass p-4 text-center'><div class='text-slate-400 text-xs'>평균 월세</div><div class='text-lg font-bold text-sky-300'>1,940만</div></div><div class='glass p-4 text-center'><div class='text-slate-400 text-xs'>평균 면적</div><div class='text-lg font-bold text-sky-300'>95.4㎡</div></div><div class='glass p-4 text-center'><div class='text-slate-400 text-xs'>최다 업종</div><div class='text-lg font-bold text-sky-300'>일반음식점</div></div>
         </div>
     </header>
     
     <div class='glass p-6 mb-8'>
-        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'>
-            <i data-lucide='briefcase'></i>업종 분석
-        </h2>
+        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'><i data-lucide='briefcase'></i>업종 분석</h2>
         <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/top_business_large.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>전체 업종 분포</h4><p class='text-sm text-slate-300'>상위 업종의 높은 분포는 검증된 모델을 의미합니다. 틈새 시장 노리는 경우 역발상적 접근이 가능합니다.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/region_industry_stacked.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>지역별 업종 분포(누적)</h4><p class='text-sm text-slate-300'>주요 역세권 상권은 F&B 및 서비스 업종이 독점적 우위를 점합니다. 지역별 특성에 맞는 전략적 포지셔닝이 필수입니다.</p></div>
+            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/top_business_large.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>업종별 분포</h4><p class='text-sm text-slate-300'>검증된 비즈니스 모델을 파악하여 틈새 전략을 세우세요.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/region_industry_stacked.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>지역별 업종 분포</h4><p class='text-sm text-slate-300'>역세권의 F&B 우위를 기반으로 한 입지 포지셔닝이 필수입니다.</p></div>
         </div>
     </div>
     <div class='glass p-6 mb-8'>
-        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'>
-            <i data-lucide='trending-up'></i>비용 및 효율성
-        </h2>
+        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'><i data-lucide='dollar-sign'></i>비용 및 효율성</h2>
         <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/premium_by_industry.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>업종별 권리금</h4><p class='text-sm text-slate-300'>주류점 등은 고위험-고수익 구조입니다. 투자비 회수 지표로 권리금을 확인하세요.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/size_rent_efficiency.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>면적 대비 임대료</h4><p class='text-sm text-slate-300'>소형 평수는 입지에 따라 가격 편차가 큽니다. 입지가 과대평가된 매물을 가려내는 것이 핵심입니다.</p></div>
+            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/premium_by_industry.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>업종별 권리금</h4><p class='text-sm text-slate-300'>시설/영업가치가 반영된 권리금을 통해 투자 회수 전략을 수립하세요.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/size_rent_efficiency.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>면적 대비 임대료</h4><p class='text-sm text-slate-300'>소형 평수는 입지 가치가 가격을 결정하므로 효율적인 선택이 필요합니다.</p></div>
         </div>
+    </div>
+    <div class='glass p-6 mb-8'>
+        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'><i data-lucide='map'></i>상권 밀집도</h2>
+        <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/hist_0.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>보증금 분포</h4><p class='text-sm text-slate-300'>중앙값 2,000만원 중심의 시장 진입 전략이 필요합니다.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/hist_1.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>월세 분포</h4><p class='text-sm text-slate-300'>100~150만원 구간의 공실 방어 전략을 적용하세요.</p></div>
+        </div>
+    </div>
+    <div class='glass p-6 mb-8'>
+        <h2 class='text-2xl font-bold text-white mb-6 flex items-center gap-3'><i data-lucide='map-pin'></i>입지 및 트렌드</h2>
+        <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/corr.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>가격 상관관계</h4><p class='text-sm text-slate-300'>보증금과 월세의 상관관계를 이용해 협상력을 확보하십시오.</p></div><div class='bg-slate-900/50 p-4 rounded-lg'><img src='images/floor_premium_trend.png' class='w-full rounded mb-3'><h4 class='text-sky-300 font-bold'>층별 트렌드</h4><p class='text-sm text-slate-300'>로드샵 vs 목적형 사업 성격에 따른 층별 전략을 대조하십시오.</p></div>
+        </div>
+    </div>
+    <div class='glass p-8'><h2 class='text-2xl font-bold text-white mb-4'>핵심 키워드 전략 분석</h2>
+        <img src='images/keyword_strategy_tfidf.png' class='w-full rounded-lg'>
     </div>
     <script>lucide.createIcons();</script>
 </div></body></html>

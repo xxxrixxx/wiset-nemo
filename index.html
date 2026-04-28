@@ -1,16 +1,49 @@
 
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
-<body class="bg-light"><div class="container py-4">
-    <h2 class="mb-4">상가 매물 심층 분석 대시보드</h2>
-    <div class="row">
-        <div class="col-md-6"><div class="card p-3 shadow-sm"><h5>보증금 분석</h5><canvas id="dChart"></canvas><div class="mt-2 text-muted small">보증금은 중앙값 2,000만원을 기준으로 시장의 핵심 진입 장벽이 형성되어 있습니다. 예비 창업자의 70%가 이 구간에 집중되어 있어, 중개 전략 수립 시 2,000만원 내외 매물 확보가 공실 리스크 방어의 핵심입니다.</div><div class="mt-1 text-primary small">해석: 보증금 데이터의 롱테일 분포는 극단적 고가 매물에 의한 평균의 왜곡을 보여줍니다. 따라서 25%~75% 분위수(1,000~3,000만원)를 중심으로 시장을 해석하는 것이 통계적으로 유의미합니다.</div></div></div>
-        <div class="col-md-6"><div class="card p-3 shadow-sm"><h5>월세 분석</h5><canvas id="rChart"></canvas><div class="mt-2 text-muted small">월세 100~150만원 구간이 가장 빈번합니다. 전체의 75%가 222만원 이하로, 소규모 자영업자 타겟팅이 시장의 주류를 이룹니다. 500만원 이상 고가 매물은 브랜드 홍보가 중요한 역세권 메인 대로변에 집중되어 있습니다.</div><div class="mt-1 text-primary small">해석: 월세의 표준편차가 1,997에 달한다는 것은 매물 간의 입지적 가치 격차가 매우 큼을 의미합니다. 단순히 평균 월세를 기준으로 삼지 말고, 업종별/층별 세분화된 임대료 기준을 적용해야 합니다.</div></div></div>
+<!DOCTYPE html>
+<html lang='ko'>
+<head>
+    <meta charset='UTF-8'>
+    <title>심층 상권 분석 대시보드</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <style>
+        body { background: #f4f7f6; }
+        .card { margin-bottom: 20px; border-radius: 12px; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .insight-box { background: #eef3f7; padding: 15px; border-radius: 8px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<div class='container py-5'>
+    <h2 class='mb-4'>상가 매물 전략적 EDA 분석 리포트</h2>
+    <div class='card p-4'>
+        <h5>1. 보증금 분석</h5>
+        <div class='row'>
+            <div class='col-md-6'><img src='images/hist_0.png' class='img-fluid'></div>
+            <div class='col-md-6 insight-box'>
+                <p><strong>비즈니스 인사이트:</strong> 2,000만원 내외가 핵심 진입 장벽이며, 창업자 70%가 이 구간에 집중되어 있어 해당 매물 확보가 공실 방어의 핵심입니다.</p>
+                <p><strong>분석 및 해석:</strong> 보증금 데이터는 전형적인 롱테일 분포를 보입니다. 평균값(약 2,800만원)은 고가 매물에 의해 왜곡되므로, 중앙값(2,000만원)을 기준으로 시장 전략을 수립해야 합니다.</p>
+            </div>
+        </div>
     </div>
-    <div class="card mt-4 p-4 shadow-sm"><h5>종합 인사이트</h5><p>본 분석 리포트는 총 387개 매물을 대상으로 상권의 자본 투입과 입지 효율성을 입체적으로 진단하였습니다. 특히 보증금-월세 간 0.89의 강력한 상관관계는 시장 가격 결정 기제가 매우 안정적으로 작동하고 있음을 증명합니다. 창업 전략 수립 시 1층 중심의 고비용 구조를 탈피하여, 2층 이상에서의 가성비 전략이 생존율을 높이는 핵심 동력이 될 수 있음을 시사합니다.</p></div>
+    <div class='card p-4'>
+        <h5>2. 월세 분석</h5>
+        <div class='row'>
+            <div class='col-md-6'><img src='images/hist_1.png' class='img-fluid'></div>
+            <div class='col-md-6 insight-box'>
+                <p><strong>비즈니스 인사이트:</strong> 100~150만원 구간이 가장 빈번하며, 222만원 이하가 전체의 75%를 차지하여 소규모 자영업자 타겟팅이 주류입니다.</p>
+                <p><strong>분석 및 해석:</strong> 월세의 표준편차가 매우 커 입지/규모에 따른 비용 격차가 극심합니다. 단순히 평균 월세를 기준으로 삼지 말고, 업종별/층별로 세분화된 임대료 기준을 적용해야 합니다.</p>
+            </div>
+        </div>
+    </div>
+    <div class='card p-4'>
+        <h5>3. 가격 요인 상관관계</h5>
+        <div class='row'>
+            <div class='col-md-6'><img src='images/corr.png' class='img-fluid'></div>
+            <div class='col-md-6 insight-box'>
+                <p><strong>비즈니스 인사이트:</strong> 보증금과 월세는 0.89의 강력한 양의 상관관계를 가지며, 합리적이고 안정적인 시장 가격 메커니즘을 형성하고 있습니다.</p>
+                <p><strong>분석 및 해석:</strong> 회귀선에서 크게 벗어난 매물들은 보증금 조절형 매물로서, 소유주의 수익 전략이나 임차인의 고정비 절감 요구가 반영된 특수 사례로 해석해야 합니다.</p>
+            </div>
+        </div>
+    </div>
 </div>
-<script>
-    new Chart(document.getElementById('dChart'), { type: 'pie', data: { labels: ["0-1\uc5b5", "1\uc5b5-2\uc5b5", "2\uc5b5\uc774\uc0c1"], datasets: [{ data: [370, 14, 3] }] } });
-    new Chart(document.getElementById('rChart'), { type: 'pie', data: { labels: ["0-100\ub9cc", "100-200\ub9cc", "200\ub9cc\uc774\uc0c1"], datasets: [{ data: [17, 0, 370] }] } });
-</script></body></html>
+</body>
+</html>

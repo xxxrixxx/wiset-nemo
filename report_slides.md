@@ -6,10 +6,33 @@ header: '종합 상가 데이터 분석 리포트'
 footer: '© 2026 Wiset-Nemo'
 style: |
   section {
-    font-family: 'Pretendard', sans-serif;
-    background-color: #f8fafc;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #222;
+    padding: 40px;
+    border: 4px solid #222;
   }
-  h1, h2 { color: #0369a1; }
+  h1, h2 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    border-bottom: 4px solid #222;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  table {
+    border: 3px solid #222;
+    background-color: #fff;
+    box-shadow: 8px 8px 0px #222;
+  }
+  th, td {
+    border: 2px solid #222;
+    padding: 10px;
+  }
+  strong {
+    background-color: #ffdd00;
+    padding: 2px 5px;
+    border: 2px solid #222;
+  }
 ---
 
 # 종합 상가 데이터 대시보드
